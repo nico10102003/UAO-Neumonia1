@@ -6,7 +6,8 @@ import csv
 import tkinter as tk
 from tkinter import filedialog, font, messagebox, ttk
 
-from PIL import Image, ImageDraw, ImageTk
+from PIL import Image, ImageDraw, ImageTk, ImageFont
+from datetime import datetime
 
 from src.integrator import predict
 from src.read_img import read_dicom_file, read_jpg_file
@@ -293,70 +294,104 @@ class App:
         if self.label is None:
             messagebox.showinfo(
                 title="Advertencia",
-                message="Primero debe realizar una predicción.",
-            )
+             message="Primero debe realizar una predicción.",
+            )   
             return
 
-        pdf_path = f"Reporte{self.reportID}.pdf"
+        patient_id = self.text1.get().strip() or "sin_identificar"
+        timestamp = datetime.now()
+
+        pdf_filename = (f"Reporte_{patient_id}_{timestamp:%Y%m%d_%H%M%S}.pdf")
 
         try:
-            report_image = Image.new(
-                "RGB",
-                (1000, 800),
-                "white",
-            )
-
+            report_image = Image.new("RGB", (1000, 850), "white")
             draw = ImageDraw.Draw(report_image)
 
-            draw.text(
-                (50, 40),
-                "REPORTE DE DETECCIÓN DE NEUMONÍA",
-                fill="black",
-            )
+            title_font = self._load_font(size=26, bold=True)
+            label_font = self._load_font(size=18, bold=True)
+            text_font = self._load_font(size=16, bold=False)
 
             draw.text(
-                (50, 100),
-                f"Predicción: {self.label}",
-                fill="black",
+            (50, 30),
+            "REPORTE DE DETECCIÓN DE NEUMONÍA",
+            fill="black",
+            align="center",
+            font=title_font,
             )
 
-            draw.text(
-                (50, 140),
-                f"Probabilidad: {self.proba:.2f}%",
-                fill="black",
-            )
+            draw.line((50, 75, 950, 75), fill="black", width=2)
 
-            if self.heatmap is not None:
-                heatmap = Image.fromarray(self.heatmap)
-                heatmap = heatmap.resize((512, 512))
+            info_lines = [
+            ("Cédula del paciente:", patient_id),
+            ("Fecha del reporte:", timestamp.strftime("%Y-%m-%d %H:%M")),
+            ("Predicción:", self.label),
+            ("Probabilidad:", f"{self.proba:.2f}%"),
+            ]
 
-                report_image.paste(
-                    heatmap,
-                    (50, 200),
+            y = 95
+            for label_text, value in info_lines:
+                draw.text((50, y), label_text, fill="black", font=label_font)
+                draw.text((280, y), value, fill="black", font=text_font)
+                y += 32
+
+             # Imagen original y heatmap, lado a lado
+            image_y = y + 20
+
+            if self.array is not None:
+                original_img = Image.fromarray(self.array).resize((440, 440))
+                report_image.paste(original_img, (50, image_y))
+                draw.text(
+                    (50, image_y - 24),
+                    "Imagen Radiográfica Original",
+                    fill="black",
+                    font=label_font,
                 )
 
-            report_image.save(
-                pdf_path,
-                "PDF",
-                resolution=100.0,
-            )
+            if self.heatmap is not None:
+                heatmap_img = Image.fromarray(self.heatmap).resize((440, 440))
+                report_image.paste(heatmap_img, (510, image_y))
+                draw.text(
+                    (510, image_y - 24),
+                    "Mapa de Calor (Grad-CAM)",
+                    fill="black",
+                    font=label_font,
+                )
 
-            self.reportID += 1
+            report_image.save(pdf_filename, "PDF", resolution=100.0)
 
             messagebox.showinfo(
-                title="PDF",
-                message="El PDF fue generado con éxito.",
+            title="PDF",
+            message=f"El PDF fue generado con éxito:\n{pdf_filename}",
             )
 
         except (OSError, TypeError, ValueError) as error:
             messagebox.showinfo(
                 title="Error",
                 message=(
-                    "No fue posible generar el PDF:\n"
-                    f"{error}"
+                "No fue posible generar el PDF:\n"
+                f"{error}"
                 ),
             )
 
+    @staticmethod
+    def _load_font(size, bold=False):
+        """Carga una fuente TrueType legible, con respaldo a la fuente por defecto.
+
+        Args:
+            size: Tamaño de la fuente en puntos.
+            bold: Si se debe intentar cargar la variante en negrita.
+
+        Returns:
+            PIL.ImageFont.FreeTypeFont o PIL.ImageFont.ImageFont: Fuente cargada.
+
+        """
+        font_name = "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"
+        try:
+            return ImageFont.truetype(font_name, size)
+        except OSError:
+            return ImageFont.load_default()
+
+    
     def delete(self):
         """Borra los datos actuales y reinicia la interfaz."""
         answer = messagebox.askokcancel(
