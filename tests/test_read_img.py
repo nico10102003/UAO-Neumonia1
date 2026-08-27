@@ -9,7 +9,6 @@ from PIL import Image
 
 from src.read_img import read_dicom_file, read_jpg_file
 
-
 # ============================================================
 # PRUEBAS read_jpg_file
 # ============================================================

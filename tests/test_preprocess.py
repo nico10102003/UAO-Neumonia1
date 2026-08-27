@@ -1,11 +1,8 @@
 """Pruebas unitarias para el preprocesamiento de imágenes."""
 
-import cv2
 import numpy as np
-import pytest
 
 from src.preprocess_img import preprocess
-
 
 # ============================================================
 # PRUEBAS BÁSICAS

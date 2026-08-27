@@ -23,7 +23,6 @@ def configurar_mocks(
     mock_grad_cam,
 ):
     """Configura los mocks utilizados por predict."""
-
     mock_preprocess.return_value = np.zeros(
         (1, 512, 512, 1),
         dtype=np.float32,
