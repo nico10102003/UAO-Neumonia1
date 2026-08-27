@@ -1,16 +1,16 @@
 ## Hola! Bienvenido a la herramienta para la detección rápida de neumonía
 
-Hola y bienvenido a la herramienta para la detección de neumonía mediante Deep Learning aplicado al procesamiento de imágenes radiográficas de tórax.
+Hola y bienvenido a esta herramienta desarrollada para la detección y clasificación de neumonía mediante técnicas de Deep Learning aplicadas al procesamiento de imágenes radiográficas de tórax.
 
-El sistema permite procesar imágenes radiográficas en formato DICOM, JPG, JPEG y PNG, clasificándolas en tres categorías:
+El sistema permite procesar imágenes médicas en formatos DICOM, JPG, JPEG y PNG, realizando un proceso de lectura y preprocesamiento para posteriormente analizar la imagen mediante un modelo de aprendizaje profundo. El modelo clasifica las radiografías en tres categorías:
 
 1. Neumonía Bacteriana
-
 2. Sin Neumonía
-
 3. Neumonía Viral
 
-Aplicación de una técnica de explicación llamada Grad-CAM para resaltar con un mapa de calor las regiones relevantes de la imagen de entrada.
+Como complemento a la predicción, la aplicación incorpora la técnica de Grad-CAM, que genera un mapa de calor para resaltar las regiones de la radiografía que tuvieron mayor influencia en la decisión del modelo. Esto permite obtener una representación visual de la predicción y facilita la interpretación de los resultados.
+
+El proyecto está organizado de manera modular, incluyendo componentes para la lectura y procesamiento de imágenes, carga del modelo, clasificación y generación de mapas de explicación, además de pruebas unitarias para verificar el correcto funcionamiento de sus principales componentes.
 
 ---
 
@@ -30,23 +30,25 @@ El sistema permite:
 ---
 
 ## Tecnologías utilizadas
+El proyecto utiliza las siguientes tecnologías y herramientas:
 
-El proyecto utiliza las siguientes tecnologías:
-
-- Python 3.13
-- UV
-- TensorFlow / Keras
-- OpenCV
-- Pillow
-- Pydicom
-- NumPy
-- Pandas
-- Matplotlib
-- Tkinter
-- Pytest
-- Ruff
-- Docker
-- Git y GitHub
+* **Python 3.13** — Lenguaje principal de programación.
+* **UV** — Gestión de dependencias y ejecución del entorno de Python.
+* **TensorFlow / Keras** — Desarrollo y ejecución del modelo de Deep Learning.
+* **Grad-CAM** — Técnica de explicabilidad para visualizar las regiones relevantes de las radiografías.
+* **OpenCV** — Lectura y procesamiento de imágenes.
+* **Pillow (PIL)** — Manipulación y conversión de imágenes.
+* **Pydicom** — Lectura y procesamiento de imágenes médicas en formato DICOM.
+* **NumPy** — Procesamiento y manipulación de arreglos numéricos e imágenes.
+* **Pandas** — Manejo y análisis de datos.
+* **Matplotlib** — Generación y visualización de gráficos.
+* **Tkinter** — Desarrollo de la interfaz gráfica de la aplicación.
+* **Pytest** — Automatización de pruebas unitarias.
+* **Ruff** — Análisis estático, linting y validación del código Python.
+* **Docker** — Contenerización y configuración reproducible del entorno de ejecución.
+* **Git** — Control de versiones del código fuente.
+* **GitHub** — Gestión y almacenamiento del repositorio.
+* **Visual Studio Code** — Entorno de desarrollo utilizado para la implementación y mantenimiento del proyecto.
 
 ---
 
@@ -54,33 +56,52 @@ El proyecto utiliza las siguientes tecnologías:
 
 Consulte la documentación oficial:
 
-https://docs.astral.sh/uv/
+[Documentación oficial de UV](https://docs.astral.sh/uv/?utm_source=chatgpt.com)
 
 ---
 
 ## Clonar el proyecto
 
-git clone <URL_DEL_REPOSITORIO> cd UAO-Neumonia
+Clonar el repositorio y acceder a la carpeta del proyecto:
+
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd UAO-Neumonia1
+```
 
 ---
 
 ## Verificar Python 3.13
 
+Verificar las versiones de Python disponibles mediante:
+
+```bash
 uv python list
+```
 
-La versión del proyecto está definida en el archivo:
+La versión utilizada por el proyecto está definida en el archivo:
 
+```text
 .python-version
+```
 
 ---
 
-## Instalar las dependencias
+## Crear y sincronizar el entorno
 
+Para configurar el entorno virtual e instalar las dependencias definidas por el proyecto:
+
+```bash
 uv sync
+```
 
 Para instalar también las dependencias utilizadas durante el desarrollo y las pruebas:
 
+```bash
 uv sync --dev
+```
+
+UV se encarga de administrar el entorno virtual y las dependencias necesarias para ejecutar el proyecto.
 
 ---
 
@@ -88,59 +109,151 @@ uv sync --dev
 
 Una vez configurado el entorno, ejecutar:
 
+```bash
 uv run python detector_neumonia.py
+```
 
-La aplicación abrirá la interfaz gráfica desarrollada con Tkinter.
+La aplicación abrirá la interfaz gráfica desarrollada con **Tkinter**.
 
 ---
 
 ## Uso de la interfaz gráfica
 
-Cargar una imagen
+### Cargar una imagen
+
 Ingrese la identificación del paciente en el campo correspondiente y presione el botón:
 
-Cargar Imagen
+**Cargar Imagen**
+
 Seleccione una radiografía desde el explorador de archivos.
 
 El sistema acepta los siguientes formatos:
 
-- .dcm
-- .jpg
-- .jpeg
-- .png
+* `.dcm`
+* `.jpg`
+* `.jpeg`
+* `.png`
 
 Una vez seleccionada, la imagen será mostrada en la interfaz.
-Realizar la predicción
+
+### Realizar la predicción
 
 Presione el botón:
 
-Predecir
+**Predecir**
 
-El sistema realizará el procesamiento de la imagen y mostrará:
+El sistema realizará el procesamiento de la imagen mediante el modelo de Deep Learning y mostrará:
 
-- La clase predicha.
-- La probabilidad de la predicción.
-- El mapa de calor Grad-CAM.
-- Guardar el resultado
+* La clase predicha.
+* La probabilidad de la predicción.
+* El mapa de calor generado mediante **Grad-CAM**.
+
+Las categorías de clasificación son:
+
+* **Neumonía Bacteriana**
+* **Sin Neumonía**
+* **Neumonía Viral**
+
+### Guardar el resultado
 
 Presione el botón:
-Guardar
+
+**Guardar**
 
 para registrar la identificación del paciente, la clase predicha y la probabilidad en el historial del sistema.
 
-Generar el reporte PDF
-Presione:
-
-PDF
-
-para generar un reporte que contiene la predicción, la probabilidad y el mapa de calor Grad-CAM.
-
-Limpiar la interfaz
+### Generar el reporte PDF
 
 Presione:
-Borrar
+
+**PDF**
+
+para generar un reporte que contiene información de la predicción, la probabilidad obtenida y el mapa de calor Grad-CAM.
+
+### Limpiar la interfaz
+
+Presione:
+
+**Borrar**
 
 para eliminar los datos de la predicción actual y permitir cargar una nueva imagen.
+
+---
+
+## Procesamiento de las imágenes
+
+Antes de realizar la predicción, las imágenes pasan por una etapa de preprocesamiento para adaptarlas a las características requeridas por el modelo.
+
+El proceso incluye:
+
+1. Lectura de la imagen.
+2. Conversión a escala de grises cuando corresponde.
+3. Redimensionamiento de la imagen.
+4. Normalización de los valores de los píxeles.
+5. Preparación de la dimensión de entrada del modelo.
+6. Envío de la imagen procesada al modelo de Deep Learning.
+
+Este proceso permite mantener un formato de entrada consistente independientemente del tamaño original de la radiografía.
+
+---
+
+## Clasificación mediante Deep Learning
+
+El sistema utiliza un modelo de **Deep Learning basado en TensorFlow/Keras** para analizar las imágenes radiográficas.
+
+El modelo recibe la imagen preprocesada y genera las probabilidades correspondientes a las tres categorías de clasificación:
+
+```text
+Bacteriana
+Normal
+Viral
+```
+
+La clase con mayor probabilidad es seleccionada como resultado de la predicción.
+
+---
+
+## Explicabilidad mediante Grad-CAM
+
+Además de generar una clasificación, el sistema utiliza **Grad-CAM (Gradient-weighted Class Activation Mapping)** para proporcionar una explicación visual de la predicción.
+
+Grad-CAM genera un mapa de calor que permite identificar las regiones de la radiografía que tuvieron mayor influencia en la decisión del modelo.
+
+Esto permite complementar la predicción numérica con una representación visual de las zonas relevantes de la imagen.
+
+---
+
+## Pruebas unitarias
+
+El proyecto cuenta con un conjunto de pruebas unitarias automatizadas utilizando **Pytest**.
+
+Las pruebas se encuentran organizadas según los principales componentes del sistema:
+
+```text
+tests/
+├── test_detector.py
+├── test_grad_cam.py
+├── test_integrator.py
+├── test_preprocess.py
+└── test_read_img.py
+```
+
+Estas pruebas permiten verificar de forma independiente:
+
+* Lectura de imágenes JPG y DICOM.
+* Preprocesamiento de imágenes.
+* Clasificación y probabilidades.
+* Integración entre los diferentes componentes.
+* Generación de mapas Grad-CAM.
+* Diferentes tamaños y tipos de imágenes.
+* Tipos y dimensiones de los datos de salida.
+* Manejo de diferentes escenarios de entrada.
+
+Para ejecutar todas las pruebas:
+
+```bash
+uv run pytest -v
+```
 
 ---
 
@@ -148,27 +261,103 @@ para eliminar los datos de la predicción actual y permitir cargar una nueva ima
 
 El proyecto incluye imágenes DICOM de prueba dentro de:
 
+```text
 PruebaImagenes/DICOM/
+```
 
-Actualmente se incluyen ejemplos correspondientes a imágenes normales y virales.
-
-Estas imágenes permiten verificar la carga y el procesamiento de radiografías sin necesidad de utilizar archivos externos.
+Estas imágenes permiten verificar la carga y procesamiento de radiografías sin necesidad de utilizar archivos externos.
 
 ---
 
+## Estructura general del proyecto
+
+La organización del proyecto separa las diferentes responsabilidades del sistema:
+
+```text
+UAO-Neumonia1/
+│
+├── detector_neumonia.py
+├── src/
+│   ├── grad_cam.py
+│   ├── integrator.py
+│   ├── load_model.py
+│   ├── preprocess_img.py
+│   └── read_img.py
+│
+├── tests/
+│   ├── test_detector.py
+│   ├── test_grad_cam.py
+│   ├── test_integrator.py
+│   ├── test_preprocess.py
+│   └── test_read_img.py
+│
+├── PruebaImagenes/
+│   └── DICOM/
+│
+├── .python-version
+├── pyproject.toml
+├── uv.lock
+└── README.md
+```
+
+Esta estructura permite separar la interfaz principal, los componentes de procesamiento y las pruebas automatizadas, facilitando el mantenimiento y la validación del proyecto.
+
+---
+
+## Control de versiones
+
+El código fuente se administra mediante **Git** y se encuentra alojado en **GitHub**.
+
+## Los cambios realizados durante el desarrollo se registran mediante commits y pueden integrarse al repositorio mediante **Pull Requests**, permitiendo mantener un historial de modificaciones y facilitar la colaboración entre los integrantes del proyecto.
+
+## Ejecución completa del proyecto
+
+De forma resumida, el flujo de ejecución del sistema es:
+
+```text
+Imagen radiográfica
+        ↓
+Lectura de imagen
+        ↓
+Preprocesamiento
+        ↓
+Modelo de Deep Learning
+        ↓
+Clasificación
+        ↓
+Probabilidad
+        ↓
+Grad-CAM
+        ↓
+Mapa de calor
+        ↓
+Resultado en la interfaz
+        ↓
+Guardar / Generar PDF
+```
+
+De esta manera, el proyecto integra procesamiento de imágenes médicas, Deep Learning, explicabilidad mediante Grad-CAM, interfaz gráfica y pruebas automatizadas en una única aplicación.
+
+
 ## Arquitectura MVC
 
-La solución está organizada siguiendo el patrón de arquitectura Modelo-Vista-Controlador (MVC).
+La solución está organizada siguiendo una estructura basada en el patrón de arquitectura Modelo-Vista-Controlador (MVC). Esta separación de responsabilidades permite mantener el código modular, facilitar las pruebas unitarias y desacoplar la interfaz gráfica de los procesos de lectura, procesamiento de imágenes y clasificación mediante Deep Learning.
 
-La separación de responsabilidades permite mantener el código modular, facilitar las pruebas y desacoplar la interfaz de la lógica de procesamiento y del modelo de Deep Learning.
+La arquitectura se divide en los siguientes componentes:
 
-MODELO:
+- **Modelo:** gestión del modelo de Deep Learning y generación de explicaciones mediante Grad-CAM.
+- **Controlador:** lectura, procesamiento e integración de las imágenes con el modelo.
+- **Vista / Cliente:** interfaz gráfica mediante la cual el usuario interactúa con el sistema.
 
-El Modelo se encuentra en:
+---
 
+### MODELO
+
+La lógica relacionada con el modelo de Deep Learning se encuentra principalmente en:
+
+```text
 src/load_model.py
 src/grad_cam.py
-load_model.py
 
 Es responsable de cargar el modelo entrenado: conv_MLP_84.h5
 
@@ -254,26 +443,42 @@ Grad-CAM realiza el cálculo del gradiente de la salida correspondiente a la cla
 
 ## Pruebas unitarias
 
-El proyecto contiene dos pruebas unitarias implementadas mediante pytest.
+El proyecto cuenta con una suite de **120 pruebas unitarias** implementadas mediante **Pytest**, cuyo objetivo es verificar el correcto funcionamiento de los diferentes componentes que hacen parte del sistema de detección de neumonía.
 
-Las pruebas se encuentran en:
+Las pruebas permiten comprobar de manera independiente el comportamiento de los módulos relacionados con la lectura de imágenes, el preprocesamiento, la integración del modelo, la generación de mapas de calor Grad-CAM y las funciones principales de predicción.
 
-tests/test_detector.py
+Las pruebas se encuentran organizadas dentro de la carpeta:
+
+```text
+tests/
 
 Las funciones seleccionadas para las pruebas son:
 
-test_read_jpg_file
-test_predict
+test_detector.py
+test_grad_cam.py
+test_integrator.py
+test_preprocess.py
+test_read_img.pyt
 
 Ejecutar las pruebas:
 uv run pytest -v
 
 El resultado esperado es:
 
-tests/test_detector.py::test_read_jpg_file PASSED
-tests/test_detector.py::test_predict PASSED
+tests/test_read_img.py::test_read_jpg_file_tipo_numpy
+tests/test_read_img.py::test_read_jpg_file_tipo_pil
+tests/test_read_img.py::test_read_jpg_file_dimensiones
+tests/test_read_img.py::test_read_jpg_file_uint8
+tests/test_read_img.py::test_read_jpg_file_imagen_negra
+tests/test_read_img.py::test_read_jpg_file_imagen_pequena
+tests/test_read_img.py::test_read_jpg_file_imagen_grande
+tests/test_read_img.py::test_read_jpg_file_extensiones
+tests/test_read_img.py::test_read_jpg_file_tupla_resultado
+  C:\Users\Nicolas\Documents\ESPECIALIZACION IA\SEMESTRE 2\DESSARROLLO DE PROYECTOS DE IA\PROYECTO1NEUMONIA\UAO-Neumonia1\src\read_img.py:62: RuntimeWarning: invalid value encountered in cast
+    img2 = np.uint8(img2)
 
-============================== 2 passed ==============================
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================================ 120 passed ==============================================================
 
 Las pruebas permiten verificar el funcionamiento de la lectura de imágenes y la lógica de integración de la predicción.
 
@@ -358,32 +563,21 @@ Durante el desarrollo se consideran las siguientes prácticas:
 
 ---
 
-## Archivo requirements.txt
+## Proyecto
 
-El proyecto conserva un archivo requirements.txt generado mediante UV para facilitar la compatibilidad con herramientas que utilizan este formato.
+El proyecto base fue desarrollado por:
 
-La gestión oficial de dependencias del proyecto se realiza mediante:
+Nicolas Bolaños
+https://github.com/nico10102003
 
-pyproject.toml
-uv.lock
+Davinson Tulande
+https://github.com/DTulandeM
 
-Por lo tanto, la instalación y ejecución recomendadas utilizan UV:
+Jensen Tamayo
 
-uv sync
-uv run python detector_neumonia.py
-uv run pytest -v
 
----
-
-## Proyecto original
-
-El proyecto base fue desarrollado originalmente por:
-
-Isabella Torres Revelo
-https://github.com/isa-tr
-
-Nicolas Diaz Salazar
-https://github.com/nicolasdiazsalazar
+Nicolas Pulido
+https://github.com/nicolaspulido-crypto
 
 La implementación actual corresponde a la adaptación y finalización académica del proyecto de acuerdo con los requerimientos establecidos para el curso.
 
@@ -393,4 +587,4 @@ Proyecto académico desarrollado para la Universidad Autónoma de Occidente (UAO
 
 Repositorio:
 
-<URL_DEL_REPOSITORIO>
+https://github.com/nicolaspulido-crypto/UAO-Neumonia1
